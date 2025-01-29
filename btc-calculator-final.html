@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Price Calculator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 3rem;
+            letter-spacing: -0.02em;
+            color: #1e293b;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 1.25rem;
+            font-size: 1.25rem;
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            color: #1e293b;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 3rem;
+            max-width: 300px;
+        }
+
+        input[type="date"]:hover {
+            border-color: #cbd5e1;
+        }
+
+        input[type="date"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .price-display {
+            background: #ffffff;
+            border-radius: 1rem;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        #result {
+            font-size: 3.5rem;
+            font-weight: 600;
+            margin: 0;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .label {
+            margin-top: 0.75rem;
+            color: #64748b;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            #result {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bitcoin Price Predictor</h1>
+        
+        <input 
+            type="date" 
+            id="datePicker"
+            min="2009-01-03"
+            max="2140-12-31"
+            value="2025-01-28"
+        >
+        
+        <div class="price-display">
+            <div id="result">Select a date</div>
+            <div class="label">Predicted Price</div>
+        </div>
+    </div>
+
+    <script>
+        function getBitcoinPrice(date) {
+            const year = date.getFullYear();
+            const start = new Date(date.getFullYear(), 0, 0);
+            const diff = date - start;
+            const oneDay = 1000 * 60 * 60 * 24;
+            const dayOfYear = Math.floor(diff / oneDay);
+            
+            const decimalYear = year + (dayOfYear / 365);
+            const price = 0.01 * Math.pow(decimalYear - 2009, 5.8);
+            
+            return Math.round(price);
+        }
+
+        document.getElementById('datePicker').addEventListener('change', function(e) {
+            const date = new Date(this.value);
+            const price = getBitcoinPrice(date);
+            
+            document.getElementById('result').innerHTML = `
+                $${price.toLocaleString()}
+            `;
+        });
+
+        // Set initial price
+        const initialDate = new Date(document.getElementById('datePicker').value);
+        const initialPrice = getBitcoinPrice(initialDate);
+        document.getElementById('result').innerHTML = `
+            $${initialPrice.toLocaleString()}
+        `;
+    </script>
+</body>
+</html>
