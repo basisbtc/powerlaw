@@ -121,7 +121,6 @@
             id="datePicker"
             min="2009-01-03"
             max="2140-12-31"
-            value="2025-01-28"
         >
         
         <div class="price-display">
@@ -155,8 +154,10 @@
             `;
         });
 
-        // Set initial price
-        const initialDate = new Date(document.getElementById('datePicker').value);
+        // Set current date as initial date
+        const today = new Date();
+        document.getElementById('datePicker').valueAsDate = today;
+        const initialDate = today;
         const initialPrice = getBitcoinPrice(initialDate);
         document.getElementById('result').innerHTML = `
             $${initialPrice.toLocaleString()}
@@ -164,3 +165,4 @@
     </script>
 </body>
 </html>
+
